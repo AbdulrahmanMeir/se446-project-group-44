@@ -3,10 +3,17 @@ import sys
 import csv
 
 reader = csv.reader(sys.stdin)
-next(reader, None)  # skip header
 
 for row in reader:
-    if len(row) > 5:
-        primary_type = row[5].strip()
-        if primary_type:
-            print(f"{primary_type}\t1")
+    if not row:
+        continue
+
+    if row[0].strip() == "ID":
+        continue
+
+    if len(row) <= 5:
+        continue
+
+    primary_type = row[5].strip()
+    if primary_type:
+        print(f"{primary_type}\t1")

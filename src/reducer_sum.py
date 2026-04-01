@@ -9,8 +9,16 @@ for line in sys.stdin:
     if not line:
         continue
 
-    key, value = line.split('\t', 1)
-    count = int(value)
+    parts = line.split("\t", 1)
+    if len(parts) != 2:
+        continue
+
+    key, value = parts
+
+    try:
+        count = int(value)
+    except ValueError:
+        continue
 
     if current_key == key:
         current_count += count
