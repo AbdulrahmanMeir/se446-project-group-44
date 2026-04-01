@@ -76,19 +76,114 @@ mapred streaming \
 
 Top 5 Output Lines
 
-THEFT	2054
-BATTERY	1728
-CRIMINAL DAMAGE	1062
-MOTOR VEHICLE THEFT	948
-ASSAULT	878
+THEFT	162688
+BATTERY	151930
+NARCOTICS	74127
+ASSAULT	54070
+BURGLARY	39872
 
 
 Interpretation
 
-Theft appears to be the most frequent crime category, which suggests it should receive high operational attention.
+Theft is the most frequent crime category in the full Chicago crime dataset, followed by battery and narcotics, which indicates these categories represent the largest share of recorded incidents.
 
 Full Execution Log
-[PASTE_FULL_TERMINAL_LOG_FOR_TASK2_HERE]
+
+ameir@master-node:~/se446_milestone1$ bash scripts/run_task2.sh
+Running Task 2: Crime Type Distribution
+Input: /data/chicago_crimes.csv
+HDFS Output: /user/ameir/project/m1/task2
+packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4.1.jar] /tmp/streamjob8068888269789433965.jar tmpDir=null
+2026-04-01 18:48:07,499 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 18:48:07,787 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 18:48:08,243 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/ameir/.staging/job_1771402826595_0271
+2026-04-01 18:48:10,132 INFO mapred.FileInputFormat: Total input files to process : 1
+2026-04-01 18:48:10,175 INFO net.NetworkTopology: Adding a new node: /default-rack/146.190.147.119:9866
+2026-04-01 18:48:10,176 INFO net.NetworkTopology: Adding a new node: /default-rack/164.92.103.148:9866
+2026-04-01 18:48:10,803 INFO mapreduce.JobSubmitter: number of splits:2
+2026-04-01 18:48:11,762 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1771402826595_0271
+2026-04-01 18:48:11,762 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2026-04-01 18:48:12,138 INFO conf.Configuration: resource-types.xml not found
+2026-04-01 18:48:12,138 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2026-04-01 18:48:12,285 INFO impl.YarnClientImpl: Submitted application application_1771402826595_0271
+2026-04-01 18:48:12,352 INFO mapreduce.Job: The url to track the job: http://master-node:8088/proxy/application_1771402826595_0271/
+2026-04-01 18:48:12,354 INFO mapreduce.Job: Running job: job_1771402826595_0271
+2026-04-01 18:48:30,142 INFO mapreduce.Job: Job job_1771402826595_0271 running in uber mode : false
+2026-04-01 18:48:30,144 INFO mapreduce.Job:  map 0% reduce 0%
+2026-04-01 18:49:00,467 INFO mapreduce.Job:  map 100% reduce 0%
+2026-04-01 18:49:17,452 INFO mapreduce.Job:  map 100% reduce 100%
+2026-04-01 18:49:20,297 INFO mapreduce.Job: Job job_1771402826595_0271 completed successfully
+2026-04-01 18:49:20,597 INFO mapreduce.Job: Counters: 54
+        File System Counters
+                FILE: Number of bytes read=11798790
+                FILE: Number of bytes written=24540719
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=181964998
+                HDFS: Number of bytes written=690
+                HDFS: Number of read operations=11
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+                HDFS: Number of bytes read erasure-coded=0
+        Job Counters
+                Launched map tasks=2
+                Launched reduce tasks=1
+                Data-local map tasks=2
+                Total time spent by all maps in occupied slots (ms)=109020
+                Total time spent by all reduces in occupied slots (ms)=26364
+                Total time spent by all map tasks (ms)=54510
+                Total time spent by all reduce tasks (ms)=13182
+                Total vcore-milliseconds taken by all map tasks=54510
+                Total vcore-milliseconds taken by all reduce tasks=13182
+                Total megabyte-milliseconds taken by all map tasks=27909120
+                Total megabyte-milliseconds taken by all reduce tasks=6749184
+        Map-Reduce Framework
+                Map input records=793074
+                Map output records=793072
+                Map output bytes=10212640
+                Map output materialized bytes=11798796
+                Input split bytes=198
+                Combine input records=0
+                Combine output records=0
+                Reduce input groups=34
+                Reduce shuffle bytes=11798796
+                Reduce input records=793072
+                Reduce output records=34
+                Spilled Records=1586144
+                Shuffled Maps =2
+                Failed Shuffles=0
+                Merged Map outputs=2
+                GC time elapsed (ms)=786
+                CPU time spent (ms)=10790
+                Physical memory (bytes) snapshot=683343872
+                Virtual memory (bytes) snapshot=6559277056
+                Total committed heap usage (bytes)=348168192
+                Peak Map Physical memory (bytes)=256221184
+                Peak Map Virtual memory (bytes)=2184708096
+                Peak Reduce Physical memory (bytes)=176779264
+                Peak Reduce Virtual memory (bytes)=2192257024
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters
+                Bytes Read=181964800
+        File Output Format Counters
+                Bytes Written=690
+2026-04-01 18:49:20,597 INFO streaming.StreamJob: Output directory: /user/ameir/project/m1/task2
+
+Top 5 results:
+THEFT   162688
+BATTERY 151930
+NARCOTICS       74127
+ASSAULT 54070
+BURGLARY        39872
+
+Full sorted output saved to: /home/ameir/se446_milestone1/output/task2.txt
 
 
 
@@ -113,18 +208,114 @@ mapred streaming \
 
   Top 5 Output Lines
 
-STREET	2737
-APARTMENT	1909
-RESIDENCE	1358
-SIDEWALK	536
-PARKING LOT / GARAGE (NON RESIDENTIAL)	362
+STREET	248326
+RESIDENCE	136393
+APARTMENT	61235
+SIDEWALK	47506
+OTHER	29671
 
 Interpretation
 
-Crimes are concentrated in public and residential spaces, especially streets and apartments.
+The highest number of crimes occurred on streets and in residential locations, showing that public roads and living areas are the main crime hotspots in the dataset.
 
 Full Execution Log
-[PASTE_FULL_TERMINAL_LOG_FOR_TASK3_HERE]
+
+ameir@master-node:~/se446_milestone1$ bash scripts/run_task3.sh
+Running Task 3: Location Hotspots
+Input: /data/chicago_crimes.csv
+HDFS Output: /user/ameir/project/m1/task3
+packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4.1.jar] /tmp/streamjob6349979358985037503.jar tmpDir=null
+2026-04-01 18:51:21,846 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 18:51:22,191 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 18:51:22,693 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/ameir/.staging/job_1771402826595_0272
+2026-04-01 18:51:24,455 INFO mapred.FileInputFormat: Total input files to process : 1
+2026-04-01 18:51:24,486 INFO net.NetworkTopology: Adding a new node: /default-rack/146.190.147.119:9866
+2026-04-01 18:51:24,487 INFO net.NetworkTopology: Adding a new node: /default-rack/164.92.103.148:9866
+2026-04-01 18:51:25,113 INFO mapreduce.JobSubmitter: number of splits:2
+2026-04-01 18:51:26,017 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1771402826595_0272
+2026-04-01 18:51:26,017 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2026-04-01 18:51:26,361 INFO conf.Configuration: resource-types.xml not found
+2026-04-01 18:51:26,362 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2026-04-01 18:51:26,472 INFO impl.YarnClientImpl: Submitted application application_1771402826595_0272
+2026-04-01 18:51:26,535 INFO mapreduce.Job: The url to track the job: http://master-node:8088/proxy/application_1771402826595_0272/
+2026-04-01 18:51:26,537 INFO mapreduce.Job: Running job: job_1771402826595_0272
+2026-04-01 18:51:44,386 INFO mapreduce.Job: Job job_1771402826595_0272 running in uber mode : false
+2026-04-01 18:51:44,388 INFO mapreduce.Job:  map 0% reduce 0%
+2026-04-01 18:52:13,598 INFO mapreduce.Job:  map 50% reduce 0%
+2026-04-01 18:52:14,853 INFO mapreduce.Job:  map 100% reduce 0%
+2026-04-01 18:52:30,743 INFO mapreduce.Job:  map 100% reduce 100%
+2026-04-01 18:52:33,596 INFO mapreduce.Job: Job job_1771402826595_0272 completed successfully
+2026-04-01 18:52:33,827 INFO mapreduce.Job: Counters: 54
+        File System Counters
+                FILE: Number of bytes read=12719805
+                FILE: Number of bytes written=26382749
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=181964998
+                HDFS: Number of bytes written=4761
+                HDFS: Number of read operations=11
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+                HDFS: Number of bytes read erasure-coded=0
+        Job Counters
+                Launched map tasks=2
+                Launched reduce tasks=1
+                Data-local map tasks=2
+                Total time spent by all maps in occupied slots (ms)=106010
+                Total time spent by all reduces in occupied slots (ms)=27074
+                Total time spent by all map tasks (ms)=53005
+                Total time spent by all reduce tasks (ms)=13537
+                Total vcore-milliseconds taken by all map tasks=53005
+                Total vcore-milliseconds taken by all reduce tasks=13537
+                Total megabyte-milliseconds taken by all map tasks=27138560
+                Total megabyte-milliseconds taken by all reduce tasks=6930944
+        Map-Reduce Framework
+                Map input records=793074
+                Map output records=791479
+                Map output bytes=11136841
+                Map output materialized bytes=12719811
+                Input split bytes=198
+                Combine input records=0
+                Combine output records=0
+                Reduce input groups=212
+                Reduce shuffle bytes=12719811
+                Reduce input records=791479
+                Reduce output records=212
+                Spilled Records=1582958
+                Shuffled Maps =2
+                Failed Shuffles=0
+                Merged Map outputs=2
+                GC time elapsed (ms)=797
+                CPU time spent (ms)=11710
+                Physical memory (bytes) snapshot=705253376
+                Virtual memory (bytes) snapshot=6561787904
+                Total committed heap usage (bytes)=348127232
+                Peak Map Physical memory (bytes)=272519168
+                Peak Map Virtual memory (bytes)=2186846208
+                Peak Reduce Physical memory (bytes)=179900416
+                Peak Reduce Virtual memory (bytes)=2190491648
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters
+                Bytes Read=181964800
+        File Output Format Counters
+                Bytes Written=4761
+2026-04-01 18:52:33,833 INFO streaming.StreamJob: Output directory: /user/ameir/project/m1/task3
+
+Top 5 results:
+STREET  248326
+RESIDENCE       136393
+APARTMENT       61235
+SIDEWALK        47506
+OTHER   29671
+
+Full sorted output saved to: /home/ameir/se446_milestone1/output/task3.txt
 
 
 Task 4 – Crime Trends by Year
@@ -147,19 +338,115 @@ mapred streaming \
 
   Top 5 Output Lines
 
-2023	9446
-2022	135
-2021	82
-2017	49
-2024	39
+2001	467301
+2002	205267
+2003	985
+2004	915
+2005	1031
 
 
 Interpretation
 
-The yearly totals show how crime volume changed over time and can be used to observe long-term trends.
+The yearly crime totals show that the dataset contains a very large number of records in 2001 and 2002, while the following years in this output have much smaller counts, indicating the records are unevenly distributed across years.
 
 Full Execution Log
-[PASTE_FULL_TERMINAL_LOG_FOR_TASK3_HERE]
+
+ameir@master-node:~/se446_milestone1$ bash scripts/run_task4.sh
+Running Task 4: Crime Trends by Year
+Input: /data/chicago_crimes.csv
+HDFS Output: /user/ameir/project/m1/task4
+packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4.1.jar] /tmp/streamjob3890607220654278721.jar tmpDir=null
+2026-04-01 18:55:12,847 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 18:55:13,173 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 18:55:13,628 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/ameir/.staging/job_1771402826595_0273
+2026-04-01 18:55:15,477 INFO mapred.FileInputFormat: Total input files to process : 1
+2026-04-01 18:55:15,518 INFO net.NetworkTopology: Adding a new node: /default-rack/164.92.103.148:9866
+2026-04-01 18:55:15,520 INFO net.NetworkTopology: Adding a new node: /default-rack/146.190.147.119:9866
+2026-04-01 18:55:16,108 INFO mapreduce.JobSubmitter: number of splits:2
+2026-04-01 18:55:17,024 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1771402826595_0273
+2026-04-01 18:55:17,024 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2026-04-01 18:55:17,369 INFO conf.Configuration: resource-types.xml not found
+2026-04-01 18:55:17,370 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2026-04-01 18:55:17,499 INFO impl.YarnClientImpl: Submitted application application_1771402826595_0273
+2026-04-01 18:55:17,548 INFO mapreduce.Job: The url to track the job: http://master-node:8088/proxy/application_1771402826595_0273/
+2026-04-01 18:55:17,550 INFO mapreduce.Job: Running job: job_1771402826595_0273
+2026-04-01 18:55:37,412 INFO mapreduce.Job: Job job_1771402826595_0273 running in uber mode : false
+2026-04-01 18:55:37,414 INFO mapreduce.Job:  map 0% reduce 0%
+2026-04-01 18:56:07,808 INFO mapreduce.Job:  map 63% reduce 0%
+2026-04-01 18:56:09,043 INFO mapreduce.Job:  map 100% reduce 0%
+2026-04-01 18:56:23,598 INFO mapreduce.Job:  map 100% reduce 100%
+2026-04-01 18:56:26,444 INFO mapreduce.Job: Job job_1771402826595_0273 completed successfully
+2026-04-01 18:56:26,684 INFO mapreduce.Job: Counters: 54
+        File System Counters
+                FILE: Number of bytes read=7137663
+                FILE: Number of bytes written=15218465
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=181964998
+                HDFS: Number of bytes written=245
+                HDFS: Number of read operations=11
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+                HDFS: Number of bytes read erasure-coded=0
+        Job Counters
+                Launched map tasks=2
+                Launched reduce tasks=1
+                Data-local map tasks=2
+                Total time spent by all maps in occupied slots (ms)=116060
+                Total time spent by all reduces in occupied slots (ms)=24082
+                Total time spent by all map tasks (ms)=58030
+                Total time spent by all reduce tasks (ms)=12041
+                Total vcore-milliseconds taken by all map tasks=58030
+                Total vcore-milliseconds taken by all reduce tasks=12041
+                Total megabyte-milliseconds taken by all map tasks=29711360
+                Total megabyte-milliseconds taken by all reduce tasks=6164992
+        Map-Reduce Framework
+                Map input records=793074
+                Map output records=793073
+                Map output bytes=5551511
+                Map output materialized bytes=7137669
+                Input split bytes=198
+                Combine input records=0
+                Combine output records=0
+                Reduce input groups=25
+                Reduce shuffle bytes=7137669
+                Reduce input records=793073
+                Reduce output records=25
+                Spilled Records=1586146
+                Shuffled Maps =2
+                Failed Shuffles=0
+                Merged Map outputs=2
+                GC time elapsed (ms)=730
+                CPU time spent (ms)=15510
+                Physical memory (bytes) snapshot=661356544
+                Virtual memory (bytes) snapshot=6561976320
+                Total committed heap usage (bytes)=348151808
+                Peak Map Physical memory (bytes)=272326656
+                Peak Map Virtual memory (bytes)=2206425088
+                Peak Reduce Physical memory (bytes)=150478848
+                Peak Reduce Virtual memory (bytes)=2189799424
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters
+                Bytes Read=181964800
+        File Output Format Counters
+                Bytes Written=245
+2026-04-01 18:56:26,686 INFO streaming.StreamJob: Output directory: /user/ameir/project/m1/task4
+
+First 5 lines:
+2001    467301
+2002    205267
+2003    985
+2004    915
+2005    1031
+
+Full sorted output saved to: /home/ameir/se446_milestone1/output/task4.txt
 
 
 Task 5 – Arrest Analysis
@@ -183,12 +470,105 @@ mapred streaming \
 
    Top 5 Output Lines
 
-false	8717
-true	1282
+false	571140
+true	221932
 
 Interpretation
 
-The results show that non-arrest cases are much more common than arrest cases in the dataset.
+Most crime records in the dataset did not result in an arrest, while a smaller but still significant portion resulted in true arrest status.
 
 Full Execution Log
-[PASTE_FULL_TERMINAL_LOG_FOR_TASK3_HERE]
+
+ameir@master-node:~/se446_milestone1$ bash scripts/run_task5.sh
+Running Task 5: Arrest Analysis
+Input: /data/chicago_crimes.csv
+HDFS Output: /user/ameir/project/m1/task5
+packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4.1.jar] /tmp/streamjob9748564533859171471.jar tmpDir=null
+2026-04-01 19:00:08,584 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 19:00:09,002 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 19:00:09,583 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/ameir/.staging/job_1771402826595_0274
+2026-04-01 19:00:11,754 INFO mapred.FileInputFormat: Total input files to process : 1
+2026-04-01 19:00:11,807 INFO net.NetworkTopology: Adding a new node: /default-rack/146.190.147.119:9866
+2026-04-01 19:00:11,808 INFO net.NetworkTopology: Adding a new node: /default-rack/164.92.103.148:9866
+2026-04-01 19:00:12,503 INFO mapreduce.JobSubmitter: number of splits:2
+2026-04-01 19:00:13,508 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1771402826595_0274
+2026-04-01 19:00:13,509 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2026-04-01 19:00:13,903 INFO conf.Configuration: resource-types.xml not found
+2026-04-01 19:00:13,903 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2026-04-01 19:00:14,040 INFO impl.YarnClientImpl: Submitted application application_1771402826595_0274
+2026-04-01 19:00:14,119 INFO mapreduce.Job: The url to track the job: http://master-node:8088/proxy/application_1771402826595_0274/
+2026-04-01 19:00:14,122 INFO mapreduce.Job: Running job: job_1771402826595_0274
+2026-04-01 19:00:33,394 INFO mapreduce.Job: Job job_1771402826595_0274 running in uber mode : false
+2026-04-01 19:00:33,396 INFO mapreduce.Job:  map 0% reduce 0%
+2026-04-01 19:00:56,482 INFO mapreduce.Job:  map 100% reduce 0%
+2026-04-01 19:01:09,792 INFO mapreduce.Job:  map 100% reduce 100%
+2026-04-01 19:01:12,626 INFO mapreduce.Job: Job job_1771402826595_0274 completed successfully
+2026-04-01 19:01:12,873 INFO mapreduce.Job: Counters: 55
+        File System Counters
+                FILE: Number of bytes read=7708794
+                FILE: Number of bytes written=16360727
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=181964998
+                HDFS: Number of bytes written=25
+                HDFS: Number of read operations=11
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+                HDFS: Number of bytes read erasure-coded=0
+        Job Counters
+                Killed map tasks=1
+                Launched map tasks=2
+                Launched reduce tasks=1
+                Data-local map tasks=2
+                Total time spent by all maps in occupied slots (ms)=84896
+                Total time spent by all reduces in occupied slots (ms)=22054
+                Total time spent by all map tasks (ms)=42448
+                Total time spent by all reduce tasks (ms)=11027
+                Total vcore-milliseconds taken by all map tasks=42448
+                Total vcore-milliseconds taken by all reduce tasks=11027
+                Total megabyte-milliseconds taken by all map tasks=21733376
+                Total megabyte-milliseconds taken by all reduce tasks=5645824
+        Map-Reduce Framework
+                Map input records=793074
+                Map output records=793072
+                Map output bytes=6122644
+                Map output materialized bytes=7708800
+                Input split bytes=198
+                Combine input records=0
+                Combine output records=0
+                Reduce input groups=2
+                Reduce shuffle bytes=7708800
+                Reduce input records=793072
+                Reduce output records=2
+                Spilled Records=1586144
+                Shuffled Maps =2
+                Failed Shuffles=0
+                Merged Map outputs=2
+                GC time elapsed (ms)=598
+                CPU time spent (ms)=7250
+                Physical memory (bytes) snapshot=645373952
+                Virtual memory (bytes) snapshot=6562004992
+                Total committed heap usage (bytes)=347971584
+                Peak Map Physical memory (bytes)=249581568
+                Peak Map Virtual memory (bytes)=2184876032
+                Peak Reduce Physical memory (bytes)=147009536
+                Peak Reduce Virtual memory (bytes)=2193498112
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters
+                Bytes Read=181964800
+        File Output Format Counters
+                Bytes Written=25
+2026-04-01 19:01:12,879 INFO streaming.StreamJob: Output directory: /user/ameir/project/m1/task5
+
+Output lines:
+false   571140
+true    221932
+
+Full sorted output saved to: /home/ameir/se446_milestone1/output/task5.txt
