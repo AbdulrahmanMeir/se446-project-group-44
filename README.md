@@ -355,31 +355,30 @@ ameir@master-node:~/se446_milestone1$ bash scripts/run_task4.sh
 Running Task 4: Crime Trends by Year
 Input: /data/chicago_crimes.csv
 HDFS Output: /user/ameir/project/m1/task4
-packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4.1.jar] /tmp/streamjob3890607220654278721.jar tmpDir=null
-2026-04-01 18:55:12,847 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
-2026-04-01 18:55:13,173 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
-2026-04-01 18:55:13,628 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/ameir/.staging/job_1771402826595_0273
-2026-04-01 18:55:15,477 INFO mapred.FileInputFormat: Total input files to process : 1
-2026-04-01 18:55:15,518 INFO net.NetworkTopology: Adding a new node: /default-rack/164.92.103.148:9866
-2026-04-01 18:55:15,520 INFO net.NetworkTopology: Adding a new node: /default-rack/146.190.147.119:9866
-2026-04-01 18:55:16,108 INFO mapreduce.JobSubmitter: number of splits:2
-2026-04-01 18:55:17,024 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1771402826595_0273
-2026-04-01 18:55:17,024 INFO mapreduce.JobSubmitter: Executing with tokens: []
-2026-04-01 18:55:17,369 INFO conf.Configuration: resource-types.xml not found
-2026-04-01 18:55:17,370 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
-2026-04-01 18:55:17,499 INFO impl.YarnClientImpl: Submitted application application_1771402826595_0273
-2026-04-01 18:55:17,548 INFO mapreduce.Job: The url to track the job: http://master-node:8088/proxy/application_1771402826595_0273/
-2026-04-01 18:55:17,550 INFO mapreduce.Job: Running job: job_1771402826595_0273
-2026-04-01 18:55:37,412 INFO mapreduce.Job: Job job_1771402826595_0273 running in uber mode : false
-2026-04-01 18:55:37,414 INFO mapreduce.Job:  map 0% reduce 0%
-2026-04-01 18:56:07,808 INFO mapreduce.Job:  map 63% reduce 0%
-2026-04-01 18:56:09,043 INFO mapreduce.Job:  map 100% reduce 0%
-2026-04-01 18:56:23,598 INFO mapreduce.Job:  map 100% reduce 100%
-2026-04-01 18:56:26,444 INFO mapreduce.Job: Job job_1771402826595_0273 completed successfully
-2026-04-01 18:56:26,684 INFO mapreduce.Job: Counters: 54
+packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4.1.jar] /tmp/streamjob15298079048803516270.jar tmpDir=null
+2026-04-01 19:58:59,588 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 19:58:59,953 INFO client.DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at master-node/134.209.172.50:8032
+2026-04-01 19:59:00,437 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/ameir/.staging/job_1771402826595_0275
+2026-04-01 19:59:02,124 INFO mapred.FileInputFormat: Total input files to process : 1
+2026-04-01 19:59:02,159 INFO net.NetworkTopology: Adding a new node: /default-rack/164.92.103.148:9866
+2026-04-01 19:59:02,160 INFO net.NetworkTopology: Adding a new node: /default-rack/146.190.147.119:9866
+2026-04-01 19:59:02,781 INFO mapreduce.JobSubmitter: number of splits:2
+2026-04-01 19:59:03,702 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1771402826595_0275
+2026-04-01 19:59:03,702 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2026-04-01 19:59:04,014 INFO conf.Configuration: resource-types.xml not found
+2026-04-01 19:59:04,014 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2026-04-01 19:59:04,122 INFO impl.YarnClientImpl: Submitted application application_1771402826595_0275
+2026-04-01 19:59:04,177 INFO mapreduce.Job: The url to track the job: http://master-node:8088/proxy/application_1771402826595_0275/
+2026-04-01 19:59:04,179 INFO mapreduce.Job: Running job: job_1771402826595_0275
+2026-04-01 19:59:22,055 INFO mapreduce.Job: Job job_1771402826595_0275 running in uber mode : false
+2026-04-01 19:59:22,057 INFO mapreduce.Job:  map 0% reduce 0%
+2026-04-01 19:59:51,914 INFO mapreduce.Job:  map 100% reduce 0%
+2026-04-01 20:00:08,187 INFO mapreduce.Job:  map 100% reduce 100%
+2026-04-01 20:00:11,166 INFO mapreduce.Job: Job job_1771402826595_0275 completed successfully
+2026-04-01 20:00:11,536 INFO mapreduce.Job: Counters: 54
         File System Counters
                 FILE: Number of bytes read=7137663
-                FILE: Number of bytes written=15218465
+                FILE: Number of bytes written=15218468
                 FILE: Number of read operations=0
                 FILE: Number of large read operations=0
                 FILE: Number of write operations=0
@@ -393,14 +392,14 @@ packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4
                 Launched map tasks=2
                 Launched reduce tasks=1
                 Data-local map tasks=2
-                Total time spent by all maps in occupied slots (ms)=116060
-                Total time spent by all reduces in occupied slots (ms)=24082
-                Total time spent by all map tasks (ms)=58030
-                Total time spent by all reduce tasks (ms)=12041
-                Total vcore-milliseconds taken by all map tasks=58030
-                Total vcore-milliseconds taken by all reduce tasks=12041
-                Total megabyte-milliseconds taken by all map tasks=29711360
-                Total megabyte-milliseconds taken by all reduce tasks=6164992
+                Total time spent by all maps in occupied slots (ms)=108228
+                Total time spent by all reduces in occupied slots (ms)=24186
+                Total time spent by all map tasks (ms)=54114
+                Total time spent by all reduce tasks (ms)=12093
+                Total vcore-milliseconds taken by all map tasks=54114
+                Total vcore-milliseconds taken by all reduce tasks=12093
+                Total megabyte-milliseconds taken by all map tasks=27706368
+                Total megabyte-milliseconds taken by all reduce tasks=6191616
         Map-Reduce Framework
                 Map input records=793074
                 Map output records=793073
@@ -417,15 +416,15 @@ packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4
                 Shuffled Maps =2
                 Failed Shuffles=0
                 Merged Map outputs=2
-                GC time elapsed (ms)=730
-                CPU time spent (ms)=15510
-                Physical memory (bytes) snapshot=661356544
-                Virtual memory (bytes) snapshot=6561976320
-                Total committed heap usage (bytes)=348151808
-                Peak Map Physical memory (bytes)=272326656
-                Peak Map Virtual memory (bytes)=2206425088
-                Peak Reduce Physical memory (bytes)=150478848
-                Peak Reduce Virtual memory (bytes)=2189799424
+                GC time elapsed (ms)=731
+                CPU time spent (ms)=9840
+                Physical memory (bytes) snapshot=650633216
+                Virtual memory (bytes) snapshot=6562951168
+                Total committed heap usage (bytes)=348098560
+                Peak Map Physical memory (bytes)=253431808
+                Peak Map Virtual memory (bytes)=2185498624
+                Peak Reduce Physical memory (bytes)=148275200
+                Peak Reduce Virtual memory (bytes)=2192580608
         Shuffle Errors
                 BAD_ID=0
                 CONNECTION=0
@@ -437,7 +436,8 @@ packageJobJar: [] [/opt/hadoop-3.4.1/share/hadoop/tools/lib/hadoop-streaming-3.4
                 Bytes Read=181964800
         File Output Format Counters
                 Bytes Written=245
-2026-04-01 18:56:26,686 INFO streaming.StreamJob: Output directory: /user/ameir/project/m1/task4
+2026-04-01 20:00:11,536 INFO streaming.StreamJob: Output directory: /user/ameir/project/m1/task4
+
 
 First 5 lines:
 2001    467301

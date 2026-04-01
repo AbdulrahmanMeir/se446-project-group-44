@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import csv
+import re
 
 reader = csv.reader(sys.stdin)
 
@@ -18,12 +19,11 @@ for row in reader:
     if not date_value:
         continue
 
-    try:
-        date_part = date_value.split()[0]
-        date_parts = date_part.split("/")
-        if len(date_parts) == 3:
-            year = date_parts[2].strip()
-            if len(year) == 4 and year.isdigit():
-                print(f"{year}\t1")
-    except Exception:
+    match = re.match(r"^\d{1,2}/\d{1,2}/(\d{4})\b", date_value)
+    if not match:
         continue
+
+    year = match.group(1)
+
+    if 2000 <= int(year) <= 2026:
+        print(f"{year}\t1")
