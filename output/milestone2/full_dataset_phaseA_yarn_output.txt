@@ -1,0 +1,46 @@
+================================================================================
+SE446 Milestone 2 - Full Dataset Cluster Evidence
+================================================================================
+Spark Version: 3.5.4
+Spark Master: yarn
+Application ID: application_1777830883738_0061
+Input path: hdfs:///data/chicago_crimes.csv
+Total rows in full dataset: 793073
+
+Top 5 crime types:
++---------------+------+
+|Primary Type   |count |
++---------------+------+
+|THEFT          |162688|
+|BATTERY        |151930|
+|CRIMINAL DAMAGE|91241 |
+|NARCOTICS      |74127 |
+|ASSAULT        |54070 |
++---------------+------+
+only showing top 5 rows
+
+
+Top 5 location hotspots:
++--------------------+------+
+|Location Description|count |
++--------------------+------+
+|STREET              |248326|
+|RESIDENCE           |136393|
+|APARTMENT           |61235 |
+|SIDEWALK            |47506 |
+|OTHER               |29671 |
++--------------------+------+
+only showing top 5 rows
+
+
+Arrest distribution:
++------+------+
+|Arrest|count |
++------+------+
+|NULL  |1     |
+|false |571140|
+|true  |221932|
++------+------+
+
+
+full_dataset_phaseA_check.py completed successfully
