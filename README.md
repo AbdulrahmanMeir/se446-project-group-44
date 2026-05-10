@@ -14,12 +14,12 @@
 
 # 1. Project Overview
 
-This project analyzes the Chicago Crimes dataset using big data tools and distributed computing techniques. The project is divided into milestones.
+This project analyzes the Chicago Crimes dataset using big data tools and distributed computing techniques. The project is divided into two main milestones.
 
 - **Milestone 1:** Hadoop MapReduce analytics using Python mapper and reducer scripts.
-- **Milestone 2:** Apache Spark and Spark MLlib machine learning pipeline for arrest prediction.
+- **Milestone 2:** Apache Spark analytics and Spark MLlib machine learning pipeline for arrest prediction.
 
-The main goal of the project is to demonstrate the ability to process, analyze, and model large-scale crime data using a distributed cluster environment.
+The main goal of the project is to demonstrate the ability to process, analyze, and model large-scale crime data using a distributed Hadoop/Spark cluster environment.
 
 ---
 
@@ -34,19 +34,31 @@ hdfs:///data/chicago_crimes.csv
 hdfs:///data/chicago_crimes_sample.csv
 ```
 
-For Milestone 2 execution, the sample dataset was used:
+For the machine learning phase, the sample dataset was used:
 
 ```bash
 hdfs:///data/chicago_crimes_sample.csv
 ```
 
-## Dataset Summary from Spark
+For full dataset cluster evidence, the full dataset was also processed using Spark on YARN:
 
-From the Spark execution logs:
+```bash
+hdfs:///data/chicago_crimes.csv
+```
+
+## Dataset Summary
+
+From the Spark ML execution logs using the sample dataset:
 
 - Total rows: **10,000**
 - Total columns: **22**
 - Spark version: **3.5.4**
+- Spark master: **yarn**
+
+From the full dataset YARN evidence:
+
+- Full dataset path: `hdfs:///data/chicago_crimes.csv`
+- Total rows in full dataset: **793,073**
 - Spark master: **yarn**
 
 The dataset includes fields such as:
@@ -103,14 +115,21 @@ se446-project-group-44/
 │       ├── task2_logistic_output.txt
 │       ├── task3_random_forest_output.txt
 │       ├── task4_gbt_output.txt
-│       └── task5_crossvalidator_output.txt
+│       ├── task5_crossvalidator_output.txt
+│       ├── m2_spark_ml_client_output.txt
+│       ├── local_execution_output.txt
+│       └── full_dataset_phaseA_yarn_output.txt
 │
+├── M2_Spark_ML_Group44.ipynb
+├── m2_spark_ml.py
 ├── m2_full_pipeline_attempt.py
 ├── m2_task1_analytics.py
 ├── m2_task2_logistic.py
 ├── m2_task3_random_forest.py
 ├── m2_task4_gbt.py
-└── m2_task5_crossvalidator.py
+├── m2_task5_crossvalidator.py
+├── local_execution_check.py
+└── full_dataset_phaseA_check.py
 ```
 
 ---
@@ -179,17 +198,50 @@ label = 0 if Arrest = false
 
 ---
 
-# 6. Milestone 2 Design Decision
+# 6. Milestone 2 Task Coverage Summary
 
-A full Spark ML pipeline was initially implemented in:
+| Milestone 2 Requirement | Evidence in Repository | Status |
+|---|---|---|
+| Tasks 1–4: Spark analytics | `m2_task1_analytics.py`, `output/milestone2/task1_analytics_output.txt` | Completed |
+| Task 5: Feature engineering pipeline | `m2_spark_ml.py`, `output/milestone2/m2_spark_ml_client_output.txt` | Completed |
+| Task 6: Train and evaluate three models | `m2_spark_ml.py`, Logistic Regression, Random Forest, and GBT results | Completed |
+| Task 7: Feature importance and interpretation | Random Forest feature importance in `m2_spark_ml.py` output | Completed |
+| Task 9: Local execution evidence | `local_execution_check.py`, `output/milestone2/local_execution_output.txt` | Completed |
+| Task 10: Cluster/YARN full dataset evidence | `full_dataset_phaseA_check.py`, `output/milestone2/full_dataset_phaseA_yarn_output.txt` | Completed |
+| Task 11: Spark-submit execution evidence | `m2_spark_ml.py` executed with `spark-submit --master yarn` | Completed |
+
+---
+
+# 7. Milestone 2 Design Decision
+
+A full Spark ML pipeline was initially attempted in:
 
 ```text
 m2_full_pipeline_attempt.py
 ```
 
-However, when the full pipeline was executed as one large job, the cluster terminated the job during model training because of memory limitations.
+However, the university cluster has limited memory. Running multiple ML models and hyperparameter tuning as one large job can cause YARN to terminate the job.
 
-To solve this problem, the final implementation was split into independent Spark-submit scripts:
+To make the project reliable, the repository includes two types of implementation evidence:
+
+## 7.1 Standalone Final Pipeline
+
+The final standalone ML pipeline is:
+
+```text
+m2_spark_ml.py
+```
+
+This script covers:
+
+- Task 5: Feature engineering pipeline
+- Task 6: Three-model training and evaluation
+- Task 7: Feature importance and interpretation
+- Task 11: Spark-submit execution evidence
+
+## 7.2 Separate Model Scripts
+
+The repository also keeps separate scripts for additional evidence and safer independent execution:
 
 ```text
 m2_task1_analytics.py
@@ -199,17 +251,17 @@ m2_task4_gbt.py
 m2_task5_crossvalidator.py
 ```
 
-This design was selected because each task runs independently on YARN, avoids memory termination, and still demonstrates the full Spark ML workflow required for the milestone.
+This design makes the work easier to verify and avoids memory termination on the cluster.
 
 ---
 
-# 7. Milestone 2 Scripts
+# 8. Milestone 2 Scripts
 
 ## Task 1 - Spark Analytics
 
 **File:** `m2_task1_analytics.py`
 
-This script loads the Chicago Crimes sample dataset from HDFS and performs basic Spark DataFrame analytics.
+This script loads the Chicago Crimes dataset from HDFS and performs Spark DataFrame analytics.
 
 It includes:
 
@@ -221,106 +273,98 @@ It includes:
 - Arrest distribution
 - District-level crime counts
 
-## Task 2 - Logistic Regression
+## Task 5–7 and Task 11 - Standalone Spark ML Pipeline
 
-**File:** `m2_task2_logistic.py`
+**File:** `m2_spark_ml.py`
 
-This script trains a Logistic Regression model using Spark MLlib.
+This is the final standalone Spark ML pipeline.
 
 It includes:
 
+- Data loading from HDFS
 - Data cleaning
-- Label creation
-- StringIndexer for categorical encoding
-- VectorAssembler for feature vector creation
+- Hour extraction from the Date column
+- StringIndexer for crime type
+- VectorAssembler for required feature vector
 - Logistic Regression training
-- Model evaluation
-- Confusion matrix
-- Prediction samples
+- Random Forest training
+- Gradient-Boosted Trees training
+- Model metrics
+- Confusion matrices
+- Three-model comparison table
+- Feature importance interpretation
+- Spark-submit YARN execution evidence
 
-## Task 3 - Random Forest
+## Additional Model Evidence Scripts
 
-**File:** `m2_task3_random_forest.py`
+The following scripts provide additional independent model runs:
 
-This script trains a Random Forest model.
+```text
+m2_task2_logistic.py
+m2_task3_random_forest.py
+m2_task4_gbt.py
+m2_task5_crossvalidator.py
+```
 
-It includes:
+These scripts were useful because running each model separately reduces memory pressure on the cluster.
 
-- Spark ML Pipeline
-- Random Forest classifier
-- Evaluation metrics
-- Confusion matrix
-- Feature importance analysis
+## Local Execution Check
 
-The model was configured with a small number of trees and limited depth to fit the university cluster memory limits.
+**File:** `local_execution_check.py`
 
-## Task 4 - Gradient-Boosted Tree
+This script proves that Spark can run in local mode:
 
-**File:** `m2_task4_gbt.py`
+```text
+Spark Master: local[*]
+```
 
-This script trains a Gradient-Boosted Tree model.
+## Full Dataset YARN Check
 
-It includes:
+**File:** `full_dataset_phaseA_check.py`
 
-- Spark ML Pipeline
-- GBTClassifier
-- Model evaluation
-- Confusion matrix
-- Feature importance analysis
+This script proves that Spark can read and process the full HDFS dataset using YARN:
 
-The number of boosting iterations and tree depth were reduced to avoid memory issues on the cluster.
-
-## Task 5 - CrossValidator
-
-**File:** `m2_task5_crossvalidator.py`
-
-This script performs hyperparameter tuning using Spark MLlib CrossValidator.
-
-It includes:
-
-- Random Forest estimator
-- ParamGridBuilder
-- CrossValidator
-- F1-score based evaluation
-- Best parameter reporting
-- Tuned model evaluation
-
-The parameter grid was intentionally kept small because the university cluster has limited memory.
+```text
+hdfs:///data/chicago_crimes.csv
+```
 
 ---
 
-# 8. Features Used for Machine Learning
+# 9. Corrected Machine Learning Feature Engineering
 
-The following features were selected for Milestone 2 ML training:
-
-```text
-Primary Type
-District
-Year
-Domestic
-```
-
-After preprocessing, the final feature vector used:
+The final standalone Spark ML script uses the required Milestone 2 feature vector:
 
 ```text
-PrimaryTypeIndex
-District
-Year
-DomesticIndex
+features[0] = District
+features[1] = crime_index created from Primary Type
+features[2] = Hour extracted from Date
+features[3] = domestic_index created from Domestic
 ```
 
-## Feature Engineering
+The previous implementation used `Year`, but the corrected final implementation extracts `Hour` from the `Date` column and uses it in the feature vector.
 
-- `Primary Type` was converted into `PrimaryTypeIndex` using `StringIndexer`.
-- `Domestic` was converted into `DomesticIndex`.
-- Numeric missing values were filled.
-- `VectorAssembler` was used to create the final `features` column.
+## Feature Engineering Steps
+
+- `Primary Type` is converted into `crime_index` using `StringIndexer`.
+- `Hour` is extracted from the `Date` column using Spark timestamp functions.
+- `Domestic` is converted into `domestic_index`.
+- `District`, `crime_index`, `Hour`, and `domestic_index` are assembled into the final `features` vector.
+
+Sample feature vector output:
+
+```text
+[10.0,12.0,3.0,0.0]
+[11.0,10.0,16.0,0.0]
+[14.0,7.0,9.0,0.0]
+[1.0,25.0,10.0,0.0]
+[1.0,2.0,17.0,0.0]
+```
 
 ---
 
-# 9. Label Distribution
+# 10. Label Distribution
 
-The dataset has an imbalanced label distribution:
+The sample dataset has an imbalanced label distribution:
 
 ```text
 label = 0 (No Arrest): 8717
@@ -329,17 +373,59 @@ label = 1 (Arrest):    1283
 
 This means most records did not result in an arrest.
 
-Because of this imbalance, accuracy alone is not enough to evaluate the models. F1 score, precision, recall, AUC, and the confusion matrix are also important.
+Because of this imbalance, accuracy alone is not enough to evaluate the models. F1 score, precision, recall, AUC, and the confusion matrix are also reported.
 
 ---
 
-# 10. Spark Submit Commands
+# 11. Spark Submit Commands
 
 All Milestone 2 tasks were executed on the cluster using `spark-submit`.
 
-The following configuration was used to force Spark to use Python 3.10 because Python 3.12 on the cluster did not have the required `numpy` dependency for Spark MLlib.
+The following configuration was used to force Spark to use Python 3.10 because Python 3.12 on the cluster did not have the required NumPy dependency for Spark MLlib.
 
-## Task 1 - Analytics
+## 11.1 Final Standalone ML Pipeline
+
+```bash
+PYSPARK_PYTHON=/usr/bin/python3.10 \
+PYSPARK_DRIVER_PYTHON=/usr/bin/python3.10 \
+spark-submit \
+  --master yarn \
+  --deploy-mode client \
+  --driver-memory 512m \
+  --executor-memory 1g \
+  --executor-cores 1 \
+  --num-executors 1 \
+  --conf spark.driver.maxResultSize=128m \
+  m2_spark_ml.py | tee output/milestone2/m2_spark_ml_client_output.txt
+```
+
+## 11.2 Local Execution Check
+
+```bash
+PYSPARK_PYTHON=/usr/bin/python3.10 \
+PYSPARK_DRIVER_PYTHON=/usr/bin/python3.10 \
+spark-submit \
+  --master "local[*]" \
+  local_execution_check.py | tee output/milestone2/local_execution_output.txt
+```
+
+## 11.3 Full Dataset YARN Evidence
+
+```bash
+PYSPARK_PYTHON=/usr/bin/python3.10 \
+PYSPARK_DRIVER_PYTHON=/usr/bin/python3.10 \
+spark-submit \
+  --master yarn \
+  --deploy-mode client \
+  --driver-memory 512m \
+  --executor-memory 1g \
+  --executor-cores 1 \
+  --num-executors 1 \
+  --conf spark.driver.maxResultSize=128m \
+  full_dataset_phaseA_check.py | tee output/milestone2/full_dataset_phaseA_yarn_output.txt
+```
+
+## 11.4 Separate Model Scripts
 
 ```bash
 spark-submit \
@@ -349,8 +435,6 @@ spark-submit \
   m2_task1_analytics.py 2>&1 | tee output/milestone2/task1_analytics_output.txt
 ```
 
-## Task 2 - Logistic Regression
-
 ```bash
 spark-submit \
   --conf spark.pyspark.python=/usr/bin/python3.10 \
@@ -358,8 +442,6 @@ spark-submit \
   --conf spark.ui.showConsoleProgress=false \
   m2_task2_logistic.py 2>&1 | tee output/milestone2/task2_logistic_output.txt
 ```
-
-## Task 3 - Random Forest
 
 ```bash
 spark-submit \
@@ -369,8 +451,6 @@ spark-submit \
   m2_task3_random_forest.py 2>&1 | tee output/milestone2/task3_random_forest_output.txt
 ```
 
-## Task 4 - Gradient-Boosted Tree
-
 ```bash
 spark-submit \
   --conf spark.pyspark.python=/usr/bin/python3.10 \
@@ -378,8 +458,6 @@ spark-submit \
   --conf spark.ui.showConsoleProgress=false \
   m2_task4_gbt.py 2>&1 | tee output/milestone2/task4_gbt_output.txt
 ```
-
-## Task 5 - CrossValidator
 
 ```bash
 spark-submit \
@@ -391,7 +469,7 @@ spark-submit \
 
 ---
 
-# 11. Output Logs
+# 12. Output Logs
 
 All Spark-submit outputs were saved inside:
 
@@ -407,51 +485,134 @@ task2_logistic_output.txt
 task3_random_forest_output.txt
 task4_gbt_output.txt
 task5_crossvalidator_output.txt
+m2_spark_ml_client_output.txt
+local_execution_output.txt
+full_dataset_phaseA_yarn_output.txt
 ```
 
-These files include the full terminal output, Spark application information, dataset loading proof, model results, and completion messages.
+These files include terminal output, Spark application information, dataset loading proof, model results, confusion matrices, feature importance, and completion messages.
 
 ---
 
-# 12. Cluster Execution Evidence
+# 13. Cluster Execution Evidence
 
 The tasks were executed on the university Spark cluster using YARN.
 
-Example execution evidence from the logs:
+Example evidence from the final standalone ML output:
 
 ```text
 Spark Version: 3.5.4
 Spark Master: yarn
+Application ID: application_1777830883738_0060
+Input path: hdfs:///data/chicago_crimes_sample.csv
+Total rows loaded: 10000
+m2_spark_ml.py completed successfully
 ```
 
-Example application IDs:
-
-```text
-Task 1: application_1771402826595_0325
-Task 2: application_1771402826595_0326
-Task 3: application_1771402826595_0327
-Task 4: application_1771402826595_0328
-Task 5: application_1771402826595_0329
-```
-
-This confirms that the code was executed on the distributed Spark cluster rather than only locally.
+This confirms that the code was executed on the Spark cluster using YARN.
 
 ---
 
-# 13. Milestone 2 Results
+# 14. Local Execution Evidence
 
-## 13.1 Spark Analytics Results
+Local Spark execution was verified using:
 
-From Task 1:
+```text
+local_execution_check.py
+```
 
-### Dataset Summary
+Output file:
+
+```text
+output/milestone2/local_execution_output.txt
+```
+
+Important evidence:
+
+```text
+Spark Version: 3.5.4
+Spark Master: local[*]
+Application ID: local-1778420218938
+local_execution_check.py completed successfully
+```
+
+This confirms that Spark was successfully executed in local mode.
+
+---
+
+# 15. Full Dataset YARN Evidence
+
+Full dataset cluster execution was verified using:
+
+```text
+full_dataset_phaseA_check.py
+```
+
+Output file:
+
+```text
+output/milestone2/full_dataset_phaseA_yarn_output.txt
+```
+
+Important evidence:
+
+```text
+Spark Version: 3.5.4
+Spark Master: yarn
+Application ID: application_1777830883738_0061
+Input path: hdfs:///data/chicago_crimes.csv
+Total rows in full dataset: 793073
+full_dataset_phaseA_check.py completed successfully
+```
+
+The full dataset run also produced top crime types, top location hotspots, and arrest distribution.
+
+## Full Dataset Results
+
+### Top 5 Crime Types
+
+```text
+THEFT              162688
+BATTERY            151930
+CRIMINAL DAMAGE     91241
+NARCOTICS           74127
+ASSAULT             54070
+```
+
+### Top 5 Location Hotspots
+
+```text
+STREET       248326
+RESIDENCE    136393
+APARTMENT     61235
+SIDEWALK      47506
+OTHER         29671
+```
+
+### Arrest Distribution
+
+```text
+false: 571140
+true:  221932
+NULL:       1
+```
+
+This proves that Spark successfully processed the full HDFS dataset in YARN mode.
+
+---
+
+# 16. Milestone 2 Spark Analytics Results
+
+From `m2_task1_analytics.py` using the sample dataset:
+
+## Dataset Summary
 
 ```text
 Total rows: 10000
 Total columns: 22
 ```
 
-### Top Crime Types
+## Top Crime Types
 
 ```text
 THEFT                  2054
@@ -466,188 +627,177 @@ BURGLARY                316
 WEAPONS VIOLATION       284
 ```
 
-### Arrest Distribution
+## Arrest Distribution
 
 ```text
 Arrest = true:   1283
 Arrest = false:  8717
 ```
 
-### Interpretation
+## Interpretation
 
 The analytics show that theft is the most frequent crime type in the sample dataset. The arrest distribution shows a strong class imbalance because most records do not result in an arrest.
 
 ---
 
-## 13.2 Model Evaluation Results
+# 17. Milestone 1 vs Milestone 2 Comparison
 
-| Model | Accuracy | F1 Score | Precision | Recall | AUC |
-|---|---:|---:|---:|---:|---:|
-| Logistic Regression | 0.8787 | 0.8220 | 0.7721 | 0.8787 | 0.6716 |
-| Random Forest | 0.8787 | 0.8220 | 0.7721 | 0.8787 | 0.5913 |
-| Gradient-Boosted Tree | 0.8938 | 0.8588 | 0.8915 | 0.8938 | 0.7650 |
-| Tuned Random Forest with CrossValidator | 0.8995 | 0.8767 | N/A | N/A | N/A |
+Milestone 1 used Hadoop MapReduce, while Milestone 2 used Spark DataFrames and Spark MLlib.
+
+The purpose of this comparison is to show that Spark reproduces the same type of analytics as MapReduce while also supporting machine learning.
+
+| Analysis | Milestone 1 Approach | Milestone 2 Approach | Result |
+|---|---|---|---|
+| Crime type distribution | Hadoop MapReduce mapper/reducer | Spark DataFrame `groupBy("Primary Type").count()` | Completed |
+| Location hotspots | Hadoop MapReduce mapper/reducer | Spark DataFrame `groupBy("Location Description").count()` | Completed |
+| Yearly crime trends | Hadoop MapReduce mapper/reducer | Spark DataFrame grouping by year | Completed |
+| Arrest analysis | Hadoop MapReduce mapper/reducer | Spark DataFrame `groupBy("Arrest").count()` | Completed |
+
+## Sample Side-by-Side Results
+
+| Metric | Milestone 1 MapReduce Result | Milestone 2 Spark Result | Match Status |
+|---|---:|---:|---|
+| THEFT count | 2054 | 2054 | Matches |
+| BATTERY count | 1728 | 1728 | Matches |
+| CRIMINAL DAMAGE count | 1062 | 1062 | Matches |
+| Arrest = true | 1283 | 1283 | Matches |
+| Arrest = false | 8717 | 8717 | Matches |
+
+The matching results show that the Spark implementation is consistent with the MapReduce analytics while providing a more flexible API for additional ML tasks.
 
 ---
 
-# 14. Confusion Matrix Results
+# 18. Final Three-Model ML Results
+
+The final standalone script `m2_spark_ml.py` trained and evaluated three models on the Chicago Crimes sample dataset using Spark MLlib.
+
+| Model | AUC | Accuracy | F1 Score | Precision | Recall | Training Time |
+|---|---:|---:|---:|---:|---:|---:|
+| Logistic Regression | 0.6530 | 0.8626 | 0.8061 | 0.8029 | 0.8626 | 16.12s |
+| Random Forest | 0.7370 | 0.8844 | 0.8529 | 0.8755 | 0.8844 | 16.75s |
+| Gradient-Boosted Trees | 0.7423 | 0.8803 | 0.8518 | 0.8618 | 0.8803 | 133.66s |
+
+Based on AUC-ROC, the best model was:
+
+```text
+Gradient-Boosted Trees with AUC = 0.7423
+```
+
+---
+
+# 19. Confusion Matrix Results
 
 ## Logistic Regression
 
 ```text
-label=0, prediction=0.0: 1688
-label=1, prediction=0.0: 233
+label=0, prediction=0.0: 1651
+label=0, prediction=1.0: 9
+label=1, prediction=0.0: 255
+label=1, prediction=1.0: 6
 ```
-
-The Logistic Regression model predicted all test records as non-arrest. This is caused by the strong class imbalance in the dataset.
 
 ## Random Forest
 
 ```text
-label=0, prediction=0.0: 1688
-label=1, prediction=0.0: 233
+label=0, prediction=0.0: 1647
+label=0, prediction=1.0: 13
+label=1, prediction=0.0: 209
+label=1, prediction=1.0: 52
 ```
 
-The Random Forest model also predicted all records as non-arrest when using the reduced tree configuration required by the cluster memory limit.
-
-## Gradient-Boosted Tree
+## Gradient-Boosted Trees
 
 ```text
-label=0, prediction=0.0: 1683
-label=0, prediction=1.0: 5
-label=1, prediction=0.0: 199
-label=1, prediction=1.0: 34
-```
-
-The Gradient-Boosted Tree model performed better than Logistic Regression and Random Forest because it successfully predicted some arrest cases.
-
-## Tuned Random Forest with CrossValidator
-
-```text
-label=0, prediction=0.0: 1669
-label=0, prediction=1.0: 19
-label=1, prediction=0.0: 174
-label=1, prediction=1.0: 59
-```
-
-The tuned Random Forest improved the number of correctly predicted arrest cases compared to the untuned Random Forest.
-
----
-
-# 15. Feature Importance
-
-## Random Forest Feature Importance
-
-```text
-PrimaryTypeIndex: 0.4423
-District:         0.3991
-Year:             0.1411
-DomesticIndex:    0.0175
-```
-
-## Gradient-Boosted Tree Feature Importance
-
-```text
-PrimaryTypeIndex: 0.9780
-District:         0.0220
-Year:             0.0000
-DomesticIndex:    0.0000
-```
-
-## Tuned Random Forest Feature Importance
-
-```text
-PrimaryTypeIndex: 0.9655
-DomesticIndex:    0.0345
-District:         0.0000
-Year:             0.0000
+label=0, prediction=0.0: 1635
+label=0, prediction=1.0: 25
+label=1, prediction=0.0: 205
+label=1, prediction=1.0: 56
 ```
 
 ## Interpretation
 
-The most important feature across the tree-based models is `PrimaryTypeIndex`, which represents the crime category. This suggests that the type of crime is the strongest predictor of whether an arrest occurs.
-
-District also contributed in the Random Forest model, but it was less important in the Gradient-Boosted Tree and tuned Random Forest models.
+The Gradient-Boosted Trees model achieved the highest AUC-ROC. Random Forest achieved the highest accuracy and strong F1 score. Logistic Regression was faster but weaker at identifying arrest cases because it assumes a more linear relationship between features and the label.
 
 ---
 
-# 16. Best Model
+# 20. Feature Importance
 
-The best model based on F1 score was:
+The Random Forest model produced the following feature importances:
 
-```text
-Tuned Random Forest with CrossValidator
-```
+| Feature | Importance |
+|---|---:|
+| District | 0.043290 |
+| crime_index | 0.885660 |
+| Hour | 0.043673 |
+| domestic_index | 0.027377 |
 
-with:
-
-```text
-Accuracy: 0.8995
-F1 Score: 0.8767
-```
-
-However, the Gradient-Boosted Tree model also performed strongly:
+The most important feature was:
 
 ```text
-Accuracy: 0.8938
-F1 Score: 0.8588
-AUC: 0.7650
+crime_index
 ```
 
-The tuned Random Forest achieved the highest F1 score, while the Gradient-Boosted Tree achieved the strongest AUC among the non-tuned models.
+## Interpretation
+
+The type of crime was the strongest predictor of whether an arrest occurred. This is reasonable because some crime categories are more likely to lead to arrests than others.
+
+District and Hour contributed less, but they still provide context about where and when the crime occurred.
 
 ---
 
-# 17. CrossValidator Results
+# 21. CrossValidator Results
 
-The CrossValidator tested:
+The CrossValidator script tested a small parameter grid because the university cluster has limited memory.
 
-```text
-Parameter combinations: 4
-Folds: 2
-```
-
-The best Random Forest parameters were:
-
-```text
-numTrees: 2
-maxDepth: 2
-```
-
-The grid was intentionally kept small because the university cluster has limited memory.
-
-This still demonstrates the correct use of Spark MLlib hyperparameter tuning with:
+It demonstrates the use of:
 
 - `ParamGridBuilder`
 - `CrossValidator`
 - F1-score based evaluation
+- Best parameter reporting
+- Tuned model evaluation
+
+The grid was intentionally kept small to avoid YARN memory termination.
 
 ---
 
-# 18. Challenges and Solutions
+# 22. Challenges and Solutions
 
 ## Challenge 1: Python 3.12 Missing NumPy
 
-The default PySpark environment used Python 3.12, but Spark MLlib required `numpy`, which was not available for Python 3.12 on the cluster.
+The default PySpark environment used Python 3.12, but Spark MLlib required NumPy, which was not available for Python 3.12 on the cluster.
 
 ### Solution
 
 The Spark jobs were submitted with Python 3.10:
 
 ```bash
+PYSPARK_PYTHON=/usr/bin/python3.10
+PYSPARK_DRIVER_PYTHON=/usr/bin/python3.10
+```
+
+or:
+
+```bash
 --conf spark.pyspark.python=/usr/bin/python3.10
 --conf spark.pyspark.driver.python=/usr/bin/python3.10
 ```
 
-Python 3.10 had the required `numpy` package installed.
+Python 3.10 had the required NumPy package installed.
 
 ## Challenge 2: Full Pipeline Memory Termination
 
-The first full Spark ML pipeline attempted to train multiple models and CrossValidator in one script. The cluster killed the job during training due to memory limitations.
+The first full Spark ML pipeline attempted to train multiple models and CrossValidator in one script. The cluster could terminate heavy jobs because of memory limitations.
 
 ### Solution
 
-The final implementation split the milestone into separate Spark-submit scripts. Each script runs one task independently, reducing memory pressure and allowing all required tasks to complete successfully.
+The final repository includes:
+
+- a standalone Spark ML script with stable parameters,
+- separate model scripts for safer execution,
+- saved output logs for verification,
+- sample dataset ML training,
+- full dataset YARN evidence through a separate analytics check.
 
 ## Challenge 3: Class Imbalance
 
@@ -658,11 +808,11 @@ No Arrest: 8717
 Arrest:    1283
 ```
 
-This caused baseline models to predict mostly non-arrest cases.
+This caused some models to predict mostly non-arrest cases.
 
 ### Solution
 
-Multiple metrics were reported, including:
+Multiple metrics were reported:
 
 - Accuracy
 - F1 Score
@@ -675,7 +825,7 @@ This gives a more honest evaluation than accuracy alone.
 
 ---
 
-# 19. How to Reproduce Milestone 2
+# 23. How to Reproduce Milestone 2
 
 ## Step 1: Connect to the Cluster
 
@@ -687,7 +837,7 @@ ssh ameir@134.209.172.50
 
 ```bash
 cd ~/se446-project-group-44
-git checkout milestone-2-spark-ml
+git checkout m2-final-polish
 git pull
 ```
 
@@ -697,77 +847,100 @@ git pull
 mkdir -p output/milestone2
 ```
 
-## Step 4: Run Each Spark Job
-
-Run Task 1:
+## Step 4: Run the Final Standalone ML Pipeline
 
 ```bash
+PYSPARK_PYTHON=/usr/bin/python3.10 \
+PYSPARK_DRIVER_PYTHON=/usr/bin/python3.10 \
 spark-submit \
-  --conf spark.pyspark.python=/usr/bin/python3.10 \
-  --conf spark.pyspark.driver.python=/usr/bin/python3.10 \
-  --conf spark.ui.showConsoleProgress=false \
-  m2_task1_analytics.py 2>&1 | tee output/milestone2/task1_analytics_output.txt
+  --master yarn \
+  --deploy-mode client \
+  --driver-memory 512m \
+  --executor-memory 1g \
+  --executor-cores 1 \
+  --num-executors 1 \
+  --conf spark.driver.maxResultSize=128m \
+  m2_spark_ml.py | tee output/milestone2/m2_spark_ml_client_output.txt
 ```
 
-Run Task 2:
+## Step 5: Run Local Execution Check
 
 ```bash
+PYSPARK_PYTHON=/usr/bin/python3.10 \
+PYSPARK_DRIVER_PYTHON=/usr/bin/python3.10 \
 spark-submit \
-  --conf spark.pyspark.python=/usr/bin/python3.10 \
-  --conf spark.pyspark.driver.python=/usr/bin/python3.10 \
-  --conf spark.ui.showConsoleProgress=false \
-  m2_task2_logistic.py 2>&1 | tee output/milestone2/task2_logistic_output.txt
+  --master "local[*]" \
+  local_execution_check.py | tee output/milestone2/local_execution_output.txt
 ```
 
-Run Task 3:
+## Step 6: Run Full Dataset YARN Check
 
 ```bash
+PYSPARK_PYTHON=/usr/bin/python3.10 \
+PYSPARK_DRIVER_PYTHON=/usr/bin/python3.10 \
 spark-submit \
-  --conf spark.pyspark.python=/usr/bin/python3.10 \
-  --conf spark.pyspark.driver.python=/usr/bin/python3.10 \
-  --conf spark.ui.showConsoleProgress=false \
-  m2_task3_random_forest.py 2>&1 | tee output/milestone2/task3_random_forest_output.txt
-```
-
-Run Task 4:
-
-```bash
-spark-submit \
-  --conf spark.pyspark.python=/usr/bin/python3.10 \
-  --conf spark.pyspark.driver.python=/usr/bin/python3.10 \
-  --conf spark.ui.showConsoleProgress=false \
-  m2_task4_gbt.py 2>&1 | tee output/milestone2/task4_gbt_output.txt
-```
-
-Run Task 5:
-
-```bash
-spark-submit \
-  --conf spark.pyspark.python=/usr/bin/python3.10 \
-  --conf spark.pyspark.driver.python=/usr/bin/python3.10 \
-  --conf spark.ui.showConsoleProgress=false \
-  m2_task5_crossvalidator.py 2>&1 | tee output/milestone2/task5_crossvalidator_output.txt
+  --master yarn \
+  --deploy-mode client \
+  --driver-memory 512m \
+  --executor-memory 1g \
+  --executor-cores 1 \
+  --num-executors 1 \
+  --conf spark.driver.maxResultSize=128m \
+  full_dataset_phaseA_check.py | tee output/milestone2/full_dataset_phaseA_yarn_output.txt
 ```
 
 ---
 
-# 20. Conclusion
+# 24. Final Milestone 2 Readiness
+
+After the final fixes, the repository includes:
+
+- Spark analytics for Milestone 2
+- M1 vs M2 comparison
+- standalone Spark ML pipeline
+- correct required feature vector
+- three trained models
+- model comparison metrics
+- confusion matrices
+- feature importance interpretation
+- local execution evidence
+- YARN client-mode ML evidence
+- full dataset YARN evidence
+- saved output logs for grading verification
+
+Therefore, the Milestone 2 implementation is complete and ready for final submission.
+
+---
+
+# 25. Conclusion
 
 Milestone 2 successfully demonstrates distributed data analytics and machine learning using Apache Spark MLlib on the Chicago Crimes dataset.
 
 The project completed the following:
 
 - Loaded data from HDFS using Spark.
+- Verified local execution using `local[*]`.
 - Verified cluster execution using YARN.
+- Processed the full HDFS dataset using Spark on YARN.
 - Performed Spark DataFrame analytics.
 - Cleaned and prepared data for ML.
-- Created feature vectors using `StringIndexer` and `VectorAssembler`.
-- Trained Logistic Regression, Random Forest, and Gradient-Boosted Tree models.
+- Created the required feature vector using `District`, `crime_index`, `Hour`, and `domestic_index`.
+- Trained Logistic Regression, Random Forest, and Gradient-Boosted Trees models.
 - Evaluated models using accuracy, F1 score, precision, recall, AUC, and confusion matrices.
-- Used CrossValidator for hyperparameter tuning.
+- Reported feature importance and interpretation.
 - Saved full Spark-submit logs in `output/milestone2/`.
 
-The best model based on F1 score was the tuned Random Forest with CrossValidator, while the Gradient-Boosted Tree achieved the strongest AUC among the non-tuned models.
+The best model based on AUC-ROC in the final standalone ML run was:
+
+```text
+Gradient-Boosted Trees
+```
+
+with:
+
+```text
+AUC = 0.7423
+```
 
 This milestone shows the complete big data machine learning workflow:
 
