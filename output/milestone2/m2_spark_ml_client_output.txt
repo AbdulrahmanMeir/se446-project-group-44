@@ -1,0 +1,161 @@
+
+==========================================================================================
+SE446 Milestone 2 - Spark ML Pipeline
+==========================================================================================
+Spark Version: 3.5.4
+Spark Master: yarn
+Application ID: application_1777830883738_0060
+
+==========================================================================================
+Loading Dataset
+==========================================================================================
+Input path: hdfs:///data/chicago_crimes_sample.csv
+Total rows loaded: 10000
+Available columns:
+['ID', 'Case Number', 'Date', 'Block', 'IUCR', 'Primary Type', 'Description', 'Location Description', 'Arrest', 'Domestic', 'Beat', 'District', 'Ward', 'Community Area', 'FBI Code', 'X Coordinate', 'Y Coordinate', 'Year', 'Updated On', 'Latitude', 'Longitude', 'Location']
+
+==========================================================================================
+Task 5: Feature Engineering Pipeline
+==========================================================================================
+Rows after cleaning: 10000
+
+Label distribution:
++-----+-----+
+|label|count|
++-----+-----+
+|    0| 8717|
+|    1| 1283|
++-----+-----+
+
+
+Sample feature rows:
++--------------------------+--------+----+--------+-----------+--------------+--------------------+-----+
+|Primary Type              |District|Hour|Domestic|crime_index|domestic_index|features            |label|
++--------------------------+--------+----+--------+-----------+--------------+--------------------+-----+
+|OFFENSE INVOLVING CHILDREN|10      |3   |false   |12.0       |0             |[10.0,12.0,3.0,0.0] |1    |
+|NARCOTICS                 |11      |16  |false   |10.0       |0             |[11.0,10.0,16.0,0.0]|1    |
+|ROBBERY                   |14      |9   |false   |7.0        |0             |[14.0,7.0,9.0,0.0]  |1    |
+|CRIM SEXUAL ASSAULT       |1       |10  |false   |25.0       |0             |[1.0,25.0,10.0,0.0] |0    |
+|CRIMINAL DAMAGE           |1       |17  |false   |2.0        |0             |[1.0,2.0,17.0,0.0]  |0    |
++--------------------------+--------+----+--------+-----------+--------------+--------------------+-----+
+only showing top 5 rows
+
+
+Feature vector explanation:
+features[0] = District
+features[1] = crime_index created from Primary Type
+features[2] = Hour extracted from Date
+features[3] = domestic_index created from Domestic
+
+Training rows: 8079
+Testing rows: 1921
+
+==========================================================================================
+Task 6: Train and Evaluate Three Models
+==========================================================================================
+
+==========================================================================================
+Training Logistic Regression
+==========================================================================================
+
+==========================================================================================
+MODEL RESULTS: Logistic Regression
+==========================================================================================
+AUC-ROC:        0.6530
+Accuracy:       0.8626
+F1 Score:       0.8061
+Precision:      0.8029
+Recall:         0.8626
+Training Time:  16.12 seconds
+
+Confusion Matrix:
++-----+----------+-----+
+|label|prediction|count|
++-----+----------+-----+
+|    0|       0.0| 1651|
+|    0|       1.0|    9|
+|    1|       0.0|  255|
+|    1|       1.0|    6|
++-----+----------+-----+
+
+
+==========================================================================================
+Training Random Forest
+==========================================================================================
+
+==========================================================================================
+MODEL RESULTS: Random Forest
+==========================================================================================
+AUC-ROC:        0.7370
+Accuracy:       0.8844
+F1 Score:       0.8529
+Precision:      0.8755
+Recall:         0.8844
+Training Time:  16.75 seconds
+
+Confusion Matrix:
++-----+----------+-----+
+|label|prediction|count|
++-----+----------+-----+
+|    0|       0.0| 1647|
+|    0|       1.0|   13|
+|    1|       0.0|  209|
+|    1|       1.0|   52|
++-----+----------+-----+
+
+
+==========================================================================================
+Training Gradient-Boosted Trees
+==========================================================================================
+
+==========================================================================================
+MODEL RESULTS: Gradient-Boosted Trees
+==========================================================================================
+AUC-ROC:        0.7423
+Accuracy:       0.8803
+F1 Score:       0.8518
+Precision:      0.8618
+Recall:         0.8803
+Training Time:  133.66 seconds
+
+Confusion Matrix:
++-----+----------+-----+
+|label|prediction|count|
++-----+----------+-----+
+|    0|       0.0| 1635|
+|    0|       1.0|   25|
+|    1|       0.0|  205|
+|    1|       1.0|   56|
++-----+----------+-----+
+
+
+==========================================================================================
+Three-Model Comparison Table
+==========================================================================================
+Model                     AUC        Accuracy   F1         Precision  Recall     Time(s)   
+Logistic Regression       0.6530     0.8626     0.8061     0.8029     0.8626     16.12     
+Random Forest             0.7370     0.8844     0.8529     0.8755     0.8844     16.75     
+Gradient-Boosted Trees    0.7423     0.8803     0.8518     0.8618     0.8803     133.66    
+
+Best model based on AUC-ROC:
+Gradient-Boosted Trees with AUC = 0.7423
+
+==========================================================================================
+Task 7: Feature Importances & Interpretation
+==========================================================================================
+Random Forest Feature Importances:
+Feature              Importance  
+District             0.043290    
+crime_index          0.885660    
+Hour                 0.043673    
+domestic_index       0.027377    
+
+Most important feature: crime_index
+
+Interpretation:
+The Random Forest model identifies which input variable contributes most to predicting whether an arrest occurs. If crime_index or District has high importance, this suggests arrest outcomes are strongly related to the crime type or the district where the incident happened.
+Logistic Regression can perform worse than tree-based models because it assumes a more linear relationship between the features and the label. Random Forest and GBT can capture non-linear patterns and interactions between crime type, district, hour, and domestic status.
+
+==========================================================================================
+m2_spark_ml.py completed successfully
+==========================================================================================
